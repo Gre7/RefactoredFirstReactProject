@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledImageContainer = styled.div`
-  margin-top: 15px;
+  margin-top: 16px;
 `;
 
 export const StyledImage = styled.img`

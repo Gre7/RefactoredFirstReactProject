@@ -1,10 +1,6 @@
 import React from "react";
 import { StyledImage, StyledImageContainer } from "./ImageContainerStyled";
-
-type ImageContainerProps = {
-  imageUrl: string;
-  isLoadingError: boolean;
-};
+import { ImageContainerProps } from "./ImageContainerTypes";
 
 const erroredSrc =
   // eslint-disable-next-line max-len

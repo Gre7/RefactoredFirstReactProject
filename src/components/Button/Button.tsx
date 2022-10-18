@@ -1,17 +1,12 @@
 import React from "react";
-import { StyledButton } from "./ButtonStyled";
 
-type ButtonProps = {
-  isDisabled: boolean;
-  clickHandler: () => void;
-  buttonTitle: string;
-  className: string;
-};
+import { StyledButton } from "./ButtonStyled";
+import { ButtonProps } from "./ButtonTypes";
 
 const Button: React.FC<ButtonProps> = ({
   isDisabled,
   clickHandler,
-  buttonTitle,
+  children,
   className
 }) => {
   return (
@@ -20,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={isDisabled}
       onClick={clickHandler}
     >
-      {buttonTitle}
+      {children}
     </StyledButton>
   );
 };

@@ -2,23 +2,18 @@ import {
   HiddenCheckbox,
   StyledCheckbox,
   StyledSpan,
-  Icon,
+  StyledIcon,
   CheckboxContainer
 } from "./СontrolledCheckboxStyled";
 
-type СontrolledCheckboxProps = {
-  checked: boolean;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  label?: string;
-  name?: string;
-  className?: string;
-  disabled?: boolean;
-  size?: string;
-};
+import {
+  СontrolledCheckboxProps,
+  CheckboxSize
+} from "./СontrolledCheckboxTypes";
 
 const СontrolledCheckbox: React.FC<СontrolledCheckboxProps> = ({
   name,
-  size = "16px",
+  size = CheckboxSize.medium,
   label,
   disabled,
   onChange,
@@ -36,9 +31,9 @@ const СontrolledCheckbox: React.FC<СontrolledCheckboxProps> = ({
           disabled={disabled}
         />
         <StyledCheckbox checked={checked} size={size} disabled={disabled}>
-          <Icon viewBox="0 0 24 24">
+          <StyledIcon viewBox="0 0 24 24">
             <polyline points="20 6 9 17 4 12" />
-          </Icon>
+          </StyledIcon>
         </StyledCheckbox>
         {Boolean(label) && <StyledSpan>{label}</StyledSpan>}
       </CheckboxContainer>

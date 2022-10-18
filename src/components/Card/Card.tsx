@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
+import { ICatItem } from "../../models/models";
 import API_KEY from "../../constants/apiKey";
 import СontrolledCheckbox from "../СontrolledCheckbox/СontrolledCheckbox";
 import Button from "../Button/Button";
@@ -22,11 +23,13 @@ const Card = () => {
 
   const [isLoadingError, setIsLoadingError] = useState(false);
 
-  const [intervalChangeImg, setIntervalChangeImg] = useState(null);
+  const [intervalChangeImg, setIntervalChangeImg] = useState<
+    ReturnType<typeof setInterval>
+  >();
 
   const getImage = useCallback(async () => {
     try {
-      const response = await axios.get(
+      const response: AxiosResponse<ICatItem[]> = await axios.get(
         "https://api.thecatapi.com/v1/images/search",
         {
           headers: {
@@ -44,39 +47,41 @@ const Card = () => {
   }, []);
 
   const setIntChangeImg = useCallback(() => {
-    setIntervalChangeImg(setInterval(getImage, 3000));
+    setIntervalChangeImg(setInterval(getImage, 5000));
   }, [getImage]);
 
   const stopIntChangeImg = useCallback(() => {
-    setIntervalChangeImg(clearInterval(intervalChangeImg));
+    clearInterval(intervalChangeImg);
   }, [intervalChangeImg]);
 
-  const handleChangeEnabledChecked = useCallback(
-    ({ target: { checked } }) => {
-      if (!checked) {
-        setDisabledValue(true);
-        setRefreshChecked(false);
-        stopIntChangeImg();
-      } else {
-        setDisabledValue(false);
-      }
-      setEnabledChecked(checked);
-    },
-    [setDisabledValue, stopIntChangeImg]
-  );
+  const handleChangeEnabledChecked = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const checked = e.target.checked;
 
-  const handleChangeRefreshChecked = useCallback(
-    ({ target: { checked } }) => {
-      setRefreshChecked(checked);
-      if (checked) {
-        setIntChangeImg();
-      } else {
-        stopIntChangeImg();
-        changeImageUrl(imageUrl);
-      }
-    },
-    [changeImageUrl, imageUrl, setIntChangeImg, stopIntChangeImg]
-  );
+    setDisabledValue(false);
+    setEnabledChecked(checked);
+
+    if (!checked) {
+      setDisabledValue(true);
+      setRefreshChecked(false);
+      stopIntChangeImg();
+    }
+  };
+
+  const handleChangeRefreshChecked = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const checked = e.target.checked;
+
+    setRefreshChecked(checked);
+
+    if (checked) {
+      setIntChangeImg();
+    } else {
+      stopIntChangeImg();
+    }
+  };
 
   return (
     <StyledCard>
@@ -93,11 +98,9 @@ const Card = () => {
           disabled={disabledValue}
         />
       </StyledCheckboxesGroup>
-      <Button
-        isDisabled={disabledValue}
-        clickHandler={getImage}
-        buttonTitle="Get Cat"
-      />
+      <Button isDisabled={disabledValue} clickHandler={getImage}>
+        Get Cat
+      </Button>
       <div>
         <ImageContainer imageUrl={imageUrl} isLoadingError={isLoadingError} />
       </div>
