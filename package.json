@@ -8,6 +8,9 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@types/node": "16.11.66",
+    "@types/react": "18.0.21",
+    "@types/react-dom": "18.0.6",
     "@types/styled-components": "5.1.26",
     "axios": "1.1.2",
     "eslint-config-prettier": "^8.5.0",
