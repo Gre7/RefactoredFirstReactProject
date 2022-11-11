@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import axios, { AxiosResponse } from "axios";
 
 import { ICatItem } from "../../models/models";
@@ -13,8 +13,7 @@ import {
 } from "./CardStyled";
 
 const Card = () => {
-  const [disabledValue, setDisabledValue] = useState(false);
-  const [enabledCheckedValue, setEnabledChecked] = useState(true);
+  const [enabledChekedValue, setEnabledChekedValue] = useState(true);
   const [refreshCheckedValue, setRefreshChecked] = useState(false);
 
   const [imageUrl, changeImageUrl] = useState(
@@ -27,7 +26,7 @@ const Card = () => {
     ReturnType<typeof setInterval>
   >();
 
-  const getImage = useCallback(async () => {
+  const getImage = async () => {
     try {
       const response: AxiosResponse<ICatItem[]> = await axios.get(
         "https://api.thecatapi.com/v1/images/search",
@@ -44,26 +43,24 @@ const Card = () => {
       console.log(e);
       setIsLoadingError(true);
     }
-  }, []);
+  };
 
-  const setIntChangeImg = useCallback(() => {
+  const setIntChangeImg = () => {
     setIntervalChangeImg(setInterval(getImage, 5000));
-  }, [getImage]);
+  };
 
-  const stopIntChangeImg = useCallback(() => {
+  const stopIntChangeImg = () => {
     clearInterval(intervalChangeImg);
-  }, [intervalChangeImg]);
+  };
 
   const handleChangeEnabledChecked = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const checked = e.target.checked;
 
-    setDisabledValue(false);
-    setEnabledChecked(checked);
+    setEnabledChekedValue((prev) => !prev);
 
     if (!checked) {
-      setDisabledValue(true);
       setRefreshChecked(false);
       stopIntChangeImg();
     }
@@ -88,17 +85,17 @@ const Card = () => {
       <StyledCheckboxesGroup>
         <StyledControlledCheckbox
           label="Enabled"
-          checked={enabledCheckedValue}
+          checked={enabledChekedValue}
           onChange={handleChangeEnabledChecked}
         />
         <СontrolledCheckbox
           label="Auto-refresh"
           checked={refreshCheckedValue}
           onChange={handleChangeRefreshChecked}
-          disabled={disabledValue}
+          disabled={!enabledChekedValue}
         />
       </StyledCheckboxesGroup>
-      <Button isDisabled={disabledValue} clickHandler={getImage}>
+      <Button isDisabled={!enabledChekedValue} clickHandler={getImage}>
         Get Cat
       </Button>
       <div>
